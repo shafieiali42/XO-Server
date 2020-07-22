@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class ScoreBoardRequest extends Request {
@@ -27,8 +28,9 @@ public class ScoreBoardRequest extends Request {
     @Override
     public void execute() {
         Response response=new ScoreBoardResponse(getAllPlayer());
+
         String  responseString=new Gson().toJson(response);
-        Server.sendResponseToClient(this.getApplicator(),"ScoreBoardRequest",responseString);
+        Server.sendResponseToClient(this.getApplicator(),"ScoreBoardResponse",responseString);
     }
 
 
@@ -50,14 +52,18 @@ public class ScoreBoardRequest extends Request {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        for (Player player : playerList) {
+
+        Iterator<Player> itr = playerList.iterator();
+
+        while (itr.hasNext()){
+            Player player=itr.next();
             for (Player playerInClientHandler : setOnlineStatus()) {
                 if (player.equals(playerInClientHandler)){
-                    playerList.remove(player);
-                    playerList.add(playerInClientHandler);
+                    player.setOnlineStatus(true);
                 }
             }
         }
+
         Collections.sort(playerList);
         return playerList;
 

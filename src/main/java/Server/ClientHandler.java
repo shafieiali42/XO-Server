@@ -50,10 +50,8 @@ public class ClientHandler extends Thread {
             String requestName = "";
             String message = "";
             while (true) {
-                System.out.println(socket.getRemoteSocketAddress().toString());
                 while (scanner.hasNextLine()) {
                     String text = scanner.nextLine();
-                    System.out.println(text + " " + socket.getRemoteSocketAddress().toString());
                     switch (counter % 3) {
                         case 0:
                             authtoken = text;
@@ -83,7 +81,7 @@ public class ClientHandler extends Thread {
                                     executeRequests();
                                 }
                             } else {
-                                System.out.println("aaaaaaaa");
+
                                 if (authtoken.equalsIgnoreCase(this.authtoken)) {
                                     this.requests.add(request);
                                     executeRequests();

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Server extends Thread {
 
-    private static final int serverPort = 1010;
+    private static final int serverPort = 6969;
     ServerSocket serverSocket;
 
     private volatile boolean running;
