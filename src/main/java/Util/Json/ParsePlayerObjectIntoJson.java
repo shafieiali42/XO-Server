@@ -15,12 +15,12 @@ public class ParsePlayerObjectIntoJson {
     public static void serializePlayer(Player player) throws IOException {
 
         String jsonString = new Gson().toJson(player);
-        PrintWriter pw = new PrintWriter(new File("MinionSpellsWeapons/"+"player"+player.getUserName()+"_"+player.getPassword()+".json"));
+        PrintWriter pw = new PrintWriter(new File("Players/"+player.getUserName()+"_"+player.getPassword()+".json"));
         pw.write(jsonString);
         pw.flush();
         pw.close();
         Type type = new TypeToken<List<Player>>(){}.getType();
-        List<Player> playerList = new Gson().fromJson(new FileReader("MinionSpellsWeapons/"+"AllPlayers.json"),type);
+        List<Player> playerList = new Gson().fromJson(new FileReader("Players/"+"AllPlayers.json"),type);
         Iterator<Player> itr = playerList.iterator();
         boolean isDuplicated = false;
         while (itr.hasNext()){
@@ -32,7 +32,7 @@ public class ParsePlayerObjectIntoJson {
 
         playerList.add(player);
         String json =new Gson().toJson(playerList);
-        PrintWriter pw1 =new PrintWriter(new File("MinionSpellsWeapons/"+"AllPlayers.json"));
+        PrintWriter pw1 =new PrintWriter(new File("Players/"+"AllPlayers.json"));
         pw1.write(json);
         pw1.flush();
         pw1.close();

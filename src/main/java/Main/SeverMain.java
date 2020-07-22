@@ -1,3 +1,5 @@
+package Main;
+
 import Server.Server;
 
 public class SeverMain {

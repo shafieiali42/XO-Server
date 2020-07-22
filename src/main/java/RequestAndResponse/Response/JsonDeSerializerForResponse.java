@@ -1,6 +1,5 @@
 package RequestAndResponse.Response;
 
-import RequestAndResponse.Requests.Request;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -14,15 +13,18 @@ public class JsonDeSerializerForResponse {
     public static void setMap() {
         map.clear();
         map.put("LogInResponse", LogInResponse.class);
+        map.put("LogOutResponse",LogOutResponse.class);
+        map.put("ScoreBoardResponse",ScoreBoardResponse.class);
+
     }
 
 
-    public static Request deSerializeRequest(String responseName, String responseString) {
+    public static Response deSerializeResponse(String responseName, String responseString) {
         setMap();
         Gson gson = new Gson();
         Class classOfCard = map.get(responseName);
 //            System.out.println(minionNames.name());
-        Request request = (Request) gson.fromJson(responseString, classOfCard);
-        return request;
+        Response response = (Response) gson.fromJson(responseString, classOfCard);
+        return response;
     }
 }

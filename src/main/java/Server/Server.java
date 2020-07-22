@@ -2,7 +2,7 @@ package Server;
 
 
 import Model.Player.Player;
-import RequestAndResponse.Requests.Request;
+import Util.Json.ParsePlayerObjectIntoJson;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Server extends Thread {
 
-    private static final int serverPort = 8585;
+    private static final int serverPort = 1010;
     ServerSocket serverSocket;
 
     private volatile boolean running;
@@ -34,10 +34,11 @@ public class Server extends Thread {
     }
 
 
-    public static void sendResponseToClient(String clientName,String responseName,String response){
-        for (String clientsName:clients.keySet()){
-            if (clientName.equalsIgnoreCase(clientsName)){
-                clients.get(clientsName).sendToThisClient(responseName,response);
+    public static void
+    sendResponseToClient(String clientName, String responseName, String response) {
+        for (String clientsName : clients.keySet()) {
+            if (clientName.equalsIgnoreCase(clientsName)) {
+                clients.get(clientsName).sendToThisClient(clientName, responseName, response);
             }
         }
     }
@@ -60,8 +61,19 @@ public class Server extends Thread {
     }
 
 
-    public static Player signUp(String userName, String passWord) throws IOException {
-        Type type = new TypeToken<List<Player>>() {}.getType();
+    public static ClientHandler getClientHandler(String authtoken) {
+        for (String clientHandleName : clients.keySet()) {
+            if (clientHandleName.equalsIgnoreCase(authtoken)) {
+                return clients.get(clientHandleName);
+            }
+        }
+        return null;
+    }
+
+
+    public static Player signUp(ClientHandler clientHandler, String userName, String passWord) throws IOException {
+        Type type = new TypeToken<List<Player>>() {
+        }.getType();
         List<Player> playerList = new Gson().fromJson(new FileReader("Players/AllPlayers.json"), type);
         boolean canSignUp = true;
         for (Player player : playerList) {
@@ -71,25 +83,48 @@ public class Server extends Thread {
         }
         if (canSignUp) {
             Player player = new Player(userName, passWord);
+            player.setOnlineStatus(true);
+            clientHandler.setPlayer(player);
+
             return player;
         } else {
             return null;
         }
     }
 
-    public static Player signIn(String userName,String passWord) throws IOException {
-        Type type = new TypeToken<List<Player>>() { }.getType();
+    public static Player signIn(ClientHandler clientHandler, String userName, String passWord) throws IOException {
+        Type type = new TypeToken<List<Player>>() {
+        }.getType();
         List<Player> playerList = new Gson().fromJson(new FileReader("Players/AllPlayers.json"), type);
-        boolean valiUserNameAndPassword = false;
+        boolean validUserNameAndPassword = false;
         for (Player player : playerList) {
             if (userName.equals(player.getUserName()) && passWord.equals(player.getPassword())) {
-                valiUserNameAndPassword = true;
+                validUserNameAndPassword = true;
+                player.setOnlineStatus(true);
+                clientHandler.setPlayer(player);
                 return player;
             }
         }
         return null;
     }
 
+    public static void logOut(ClientHandler clientHandler) throws IOException {
+        clientHandler.getPlayer().setOnlineStatus(false);
+        ParsePlayerObjectIntoJson.serializePlayer(clientHandler.getPlayer());
+        clientHandler.setPlayer(null);
+    }
+
+
+    //getter and setters
+    //*********************
+
+    public static HashMap<String, ClientHandler> getClients() {
+        return clients;
+    }
+
+    public static void setClients(HashMap<String, ClientHandler> clients) {
+        Server.clients = clients;
+    }
 
 
 }

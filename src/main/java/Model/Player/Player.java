@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Comparable<Player> {
 
 
     @Expose(serialize = true, deserialize = true)
@@ -37,7 +37,22 @@ public class Player {
     }
 
 
+    @Override
+    public int compareTo(Player player) {
+        if (this.score>player.score){
+            return 1;
+        }else if (this.score<player.score){
+            return -1;
+        }else {
+            return 0;
+        }
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        Player player=(Player)obj;
+        return this.userName.equals(player.userName);
+    }
 
 
     //getter and setters
