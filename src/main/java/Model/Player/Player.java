@@ -25,6 +25,8 @@ public class Player implements Comparable<Player> {
     private transient ArrayList<Integer> pieces;
 
 
+    public Player(){}
+
     public Player(String userName,String password){
         this.userName=userName;
         this.password=password;

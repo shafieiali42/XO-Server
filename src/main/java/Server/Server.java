@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Server extends Thread {
 
-    private static final int serverPort = 6969;
+    private static final int serverPort = 1011;
     ServerSocket serverSocket;
 
     private volatile boolean running;
@@ -34,8 +34,7 @@ public class Server extends Thread {
     }
 
 
-    public static void
-    sendResponseToClient(String clientName, String responseName, String response) {
+    public static void sendResponseToClient(String clientName, String responseName, String response) {
         for (String clientsName : clients.keySet()) {
             if (clientName.equalsIgnoreCase(clientsName)) {
                 clients.get(clientsName).sendToThisClient(clientName, responseName, response);
@@ -49,6 +48,7 @@ public class Server extends Thread {
         running = true;
         while (running) {
             Socket socket = null;
+            System.out.println(clients);
             try {
                 socket = serverSocket.accept();
                 ClientHandler clientHandler = new ClientHandler(this, socket);
@@ -85,7 +85,6 @@ public class Server extends Thread {
             Player player = new Player(userName, passWord);
             player.setOnlineStatus(true);
             clientHandler.setPlayer(player);
-
             return player;
         } else {
             return null;
@@ -110,8 +109,8 @@ public class Server extends Thread {
 
     public static void logOut(ClientHandler clientHandler) throws IOException {
         clientHandler.getPlayer().setOnlineStatus(false);
+        clientHandler.setLoggedIn(false);
         ParsePlayerObjectIntoJson.serializePlayer(clientHandler.getPlayer());
-        clientHandler.setPlayer(null);
     }
 
 

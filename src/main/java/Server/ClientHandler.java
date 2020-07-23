@@ -21,12 +21,16 @@ public class ClientHandler extends Thread {
     private ArrayList<Request> requests;
     private Player player;
     private String authtoken;
+    private boolean loggedIn;
 
     public ClientHandler(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
+        this.loggedIn=false;
         this.requests = new ArrayList<>();
+        this.player=new Player();
     }
+
 
 
     public void executeRequests() {
@@ -73,6 +77,7 @@ public class ClientHandler extends Thread {
                                                 request.setApplicator(authtoken);
                                                 this.authtoken = authtoken;
                                                 Server.getClients().put(authtoken, this);
+                                                System.out.println(Server.getClients());
                                                 break;
                                             }
 //                                        }
@@ -135,5 +140,14 @@ public class ClientHandler extends Thread {
     public void setAuthtoken(String authtoken) {
         this.authtoken = authtoken;
     }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
 }
 

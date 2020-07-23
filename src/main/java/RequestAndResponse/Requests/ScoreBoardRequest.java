@@ -27,17 +27,18 @@ public class ScoreBoardRequest extends Request {
 
     @Override
     public void execute() {
-        Response response=new ScoreBoardResponse(getAllPlayer());
-
-        String  responseString=new Gson().toJson(response);
-        Server.sendResponseToClient(this.getApplicator(),"ScoreBoardResponse",responseString);
+        Response response = new ScoreBoardResponse(getAllPlayer());
+        String responseString = new Gson().toJson(response);
+        Server.sendResponseToClient(this.getApplicator(), "ScoreBoardResponse", responseString);
     }
 
 
     public static ArrayList<Player> setOnlineStatus() {
         ArrayList<Player> playerList = new ArrayList<>();
         for (ClientHandler clientHandler : Server.getClients().values()) {
-            clientHandler.getPlayer().setOnlineStatus(true);
+            if (clientHandler.isLoggedIn()){
+                clientHandler.getPlayer().setOnlineStatus(true);
+            }
             playerList.add(clientHandler.getPlayer());
         }
         return playerList;
@@ -55,11 +56,21 @@ public class ScoreBoardRequest extends Request {
 
         Iterator<Player> itr = playerList.iterator();
 
-        while (itr.hasNext()){
-            Player player=itr.next();
+        while (itr.hasNext()) {
+            Player player = itr.next();
             for (Player playerInClientHandler : setOnlineStatus()) {
-                if (player.equals(playerInClientHandler)){
-                    player.setOnlineStatus(true);
+                if (player.equals(playerInClientHandler)) {
+                    player.setOnlineStatus(playerInClientHandler.isOnlineStatus());
+                }
+            }
+        }
+
+        for (Player player : setOnlineStatus()) {
+            if (player.getUserName() == null) {
+                playerList.add(player);
+            } else {
+                if (!playerList.contains(player)) {
+                    playerList.add(player);
                 }
             }
         }
