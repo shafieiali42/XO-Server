@@ -1,9 +1,11 @@
-package Server;
+package server;
 
+import Logic.Alliance;
+import Logic.Game;
+import Logic.TileStatus;
 import Model.Player.Player;
 import RequestAndResponse.Requests.Request;
 import RequestAndResponse.Requests.JsonDeSerializerForRequest;
-import RequestAndResponse.Response.Response;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,15 +24,15 @@ public class ClientHandler extends Thread {
     private Player player;
     private String authtoken;
     private boolean loggedIn;
+    private Game game;
 
     public ClientHandler(Server server, Socket socket) {
         this.server = server;
         this.socket = socket;
-        this.loggedIn=false;
+        this.loggedIn = false;
         this.requests = new ArrayList<>();
-        this.player=new Player();
+        this.player = new Player();
     }
-
 
 
     public void executeRequests() {
@@ -69,17 +71,17 @@ public class ClientHandler extends Thread {
                             if (authtoken.equals("null")) {
                                 if (request.getRequestType().equalsIgnoreCase("LogInRequest")) {
 //                                    synchronized (Server.getClients()) {
-                                        for (ClientHandler clientHandler : Server.getClients().values()) {
-                                            if (this.socket.getRemoteSocketAddress().toString().
-                                                    equalsIgnoreCase(clientHandler.socket.getRemoteSocketAddress().toString())) {
-                                                Server.getClients().remove(clientHandler.socket.getRemoteSocketAddress().toString());
-                                                authtoken = GenerateAuthtoken.generateNewToken();
-                                                request.setApplicator(authtoken);
-                                                this.authtoken = authtoken;
-                                                Server.getClients().put(authtoken, this);
-                                                System.out.println(Server.getClients());
-                                                break;
-                                            }
+                                    for (ClientHandler clientHandler : Server.getClients().values()) {
+                                        if (this.socket.getRemoteSocketAddress().toString().
+                                                equalsIgnoreCase(clientHandler.socket.getRemoteSocketAddress().toString())) {
+                                            Server.getClients().remove(clientHandler.socket.getRemoteSocketAddress().toString());
+                                            authtoken = GenerateAuthtoken.generateNewToken();
+                                            request.setApplicator(authtoken);
+                                            this.authtoken = authtoken;
+                                            Server.getClients().put(authtoken, this);
+//                                            System.out.println(Server.getClients());
+                                            break;
+                                        }
 //                                        }
                                     }
                                     this.requests.add(request);
@@ -112,6 +114,25 @@ public class ClientHandler extends Thread {
         printer.println(message);
         printer.flush();
     }
+
+
+
+    public void playPiece(int targetTileId){
+
+            if (!game.getBoard().getBoard().get(targetTileId).equals(TileStatus.O) &&
+                    !game.getBoard().getBoard().get(targetTileId).equals(TileStatus.X)){
+                if (game.getCurrentAlliance().equals(Alliance.O)){
+                    game.getBoard().getBoard().add(targetTileId,TileStatus.O);
+                    game.getBoard().getBoard().remove(targetTileId+1);
+                }else {
+                    game.getBoard().getBoard().add(targetTileId,TileStatus.X);
+                    game.getBoard().getBoard().remove(targetTileId+1);
+                }
+
+            }
+            game.changeTurn();
+        }
+
 
 
     //getter and setters
@@ -147,6 +168,14 @@ public class ClientHandler extends Thread {
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
 }

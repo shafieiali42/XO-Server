@@ -3,10 +3,10 @@ package RequestAndResponse.Requests;
 import Model.Player.Player;
 import RequestAndResponse.Response.Response;
 import RequestAndResponse.Response.ScoreBoardResponse;
-import Server.ClientHandler;
-import Server.Server;
+import server.ClientHandler;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import server.Server;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

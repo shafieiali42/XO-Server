@@ -1,6 +1,6 @@
 package Main;
 
-import Server.Server;
+import server.Server;
 
 public class SeverMain {
     public static void main(String[] args) {

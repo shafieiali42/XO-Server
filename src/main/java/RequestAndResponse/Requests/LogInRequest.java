@@ -5,8 +5,7 @@ import Model.Player.Player;
 import RequestAndResponse.Response.LogInResponse;
 import RequestAndResponse.Response.Response;
 
-import RequestAndResponse.Response.ScoreBoardResponse;
-import Server.*;
+import server.*;
 import com.google.gson.Gson;
 
 import java.io.IOException;

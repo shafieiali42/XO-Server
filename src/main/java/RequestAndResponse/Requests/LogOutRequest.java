@@ -1,16 +1,12 @@
 package RequestAndResponse.Requests;
 
 
-import Model.Player.Player;
 import RequestAndResponse.Response.LogOutResponse;
 import RequestAndResponse.Response.Response;
-import Server.ClientHandler;
-import Server.Server;
 import com.google.gson.Gson;
+import server.Server;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
 
 public class LogOutRequest extends Request {
 
@@ -33,7 +29,6 @@ public class LogOutRequest extends Request {
                     for (String clientHandlerNamew : Server.getClients().keySet()) {
                         if (clientHandlerNamew != null) {
                             if (Server.getClients().get(clientHandlerNamew).getPlayer().getUserName() != null) {
-                                System.out.println(Server.getClients().get(clientHandlerNamew).getPlayer().getUserName());
                                 Request request = new ScoreBoardRequest(clientHandlerNamew);
                                 request.execute();
 

@@ -1,6 +1,7 @@
-package Server;
+package server;
 
 
+import Logic.Game;
 import Model.Player.Player;
 import Util.Json.ParsePlayerObjectIntoJson;
 import com.google.gson.Gson;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,12 +24,16 @@ public class Server extends Thread {
     private volatile boolean running;
 
     private static HashMap<String, ClientHandler> clients;
+    private static ArrayList<ClientHandler> playQueue;
+    private static ArrayList<Game> runningGames;
 
 
     public Server() {
         try {
             serverSocket = new ServerSocket(serverPort);
             clients = new HashMap<>();
+            playQueue=new ArrayList<>();
+            runningGames=new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,7 +54,7 @@ public class Server extends Thread {
         running = true;
         while (running) {
             Socket socket = null;
-            System.out.println(clients);
+//            System.out.println(clients);
             try {
                 socket = serverSocket.accept();
                 ClientHandler clientHandler = new ClientHandler(this, socket);
@@ -125,5 +131,20 @@ public class Server extends Thread {
         Server.clients = clients;
     }
 
+    public static ArrayList<ClientHandler> getPlayQueue() {
+        return playQueue;
+    }
+
+    public static void setPlayQueue(ArrayList<ClientHandler> playQueue) {
+        Server.playQueue = playQueue;
+    }
+
+    public static ArrayList<Game> getRunningGames() {
+        return runningGames;
+    }
+
+    public static void setRunningGames(ArrayList<Game> runningGames) {
+        Server.runningGames = runningGames;
+    }
 
 }
