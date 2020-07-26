@@ -17,6 +17,8 @@ public class JsonDeSerializerForResponse {
         map.put("ScoreBoardResponse",ScoreBoardResponse.class);
         map.put("StartGameResponse",StartGameResponse.class);
         map.put("PlayPieceResponse",PlayPieceResponse.class);
+        map.put("EndGameResponse",EndGameResponse.class);
+        map.put("StatusResponse",StatusResponse.class);
     }
 
 

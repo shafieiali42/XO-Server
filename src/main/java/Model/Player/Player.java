@@ -39,6 +39,13 @@ public class Player implements Comparable<Player> {
     }
 
 
+
+    public void setScore(){
+        this.score=wins-loose;
+    }
+
+
+
     @Override
     public int compareTo(Player player) {
         if (this.score>player.score){
@@ -50,11 +57,22 @@ public class Player implements Comparable<Player> {
         }
     }
 
+
     @Override
     public boolean equals(Object obj) {
         Player player=(Player)obj;
+        if(this.userName==null && player.userName==null){
+            return true;
+        }else if (this.userName==null || player.userName==null){
+            return false;
+        }
         return this.userName.equals(player.userName);
     }
+
+
+
+
+
 
 
     //getter and setters

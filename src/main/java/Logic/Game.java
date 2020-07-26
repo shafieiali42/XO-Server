@@ -3,6 +3,7 @@ package Logic;
 import Model.Board.Board;
 import Model.Player.Player;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
@@ -14,15 +15,22 @@ public class Game {
     private Alliance currentAlliance;
     private Alliance formerAlliance;
     private Board board;
+    private boolean finished;
 
 
     public Game(Player XPlayer, Player OPlayer) {
         this.XPlayer = XPlayer;
         this.OPlayer = OPlayer;
         currentPlayer = null;
-        formerPlayer=null;
+        formerPlayer = null;
         this.board = new Board();
-        defineStarter();
+        this.finished=false;
+        currentAlliance = Alliance.X;
+        formerAlliance = Alliance.O;
+        currentPlayer = XPlayer;
+        formerPlayer = OPlayer;
+
+//        defineStarter();
     }
 
 
@@ -31,14 +39,14 @@ public class Game {
         int randomIndex = random.nextInt(2);
         if (randomIndex % 2 == 0) {
             currentAlliance = Alliance.X;
-            formerAlliance=Alliance.O;
+            formerAlliance = Alliance.O;
             currentPlayer = XPlayer;
-            formerPlayer=OPlayer;
+            formerPlayer = OPlayer;
         } else {
             currentAlliance = Alliance.O;
-            formerAlliance=Alliance.X;
+            formerAlliance = Alliance.X;
             currentPlayer = OPlayer;
-            formerPlayer=XPlayer;
+            formerPlayer = XPlayer;
         }
     }
 
@@ -46,27 +54,19 @@ public class Game {
     public void changeTurn() {
         if (currentAlliance.equals(Alliance.O)) {
             currentAlliance = Alliance.X;
-            formerAlliance=Alliance.O;
+            formerAlliance = Alliance.O;
             currentPlayer = XPlayer;
-            formerPlayer=OPlayer;
+            formerPlayer = OPlayer;
         } else {
             currentAlliance = Alliance.O;
-            formerAlliance=Alliance.X;
+            formerAlliance = Alliance.X;
             currentPlayer = OPlayer;
-            formerPlayer=XPlayer;
+            formerPlayer = XPlayer;
         }
     }
 
 
 
-
-
-    public boolean checkWins() {
-
-
-        return false;
-
-    }
 
 
     //getter and setters
@@ -126,6 +126,14 @@ public class Game {
 
     public void setFormerAlliance(Alliance formerAlliance) {
         this.formerAlliance = formerAlliance;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 
 }

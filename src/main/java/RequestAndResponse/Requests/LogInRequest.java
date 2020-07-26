@@ -32,6 +32,7 @@ public class LogInRequest extends Request {
         if (this.mode.equalsIgnoreCase("SignUp")) {
             try {
                 Player player = Server.signUp(Server.getClientHandler(this.getApplicator()), userName, password);
+
                 Response response = new LogInResponse(player);
                 String responseString = new Gson().toJson(response);
                 for (String clientHandlerName : Server.getClients().keySet()) {
@@ -45,7 +46,7 @@ public class LogInRequest extends Request {
                 }
 
                 for (ClientHandler clientHandler : Server.getClients().values()) {
-                    if (clientHandler.getPlayer().getUserName() != null) {
+                    if (clientHandler.getPlayer().getUserName() != null && player != null) {
                         if (clientHandler.getPlayer().equals(player)) {
                             clientHandler.setLoggedIn(true);
                         }
@@ -53,6 +54,7 @@ public class LogInRequest extends Request {
                 }
 
                 Server.sendResponseToClient(this.getApplicator(), "LogInResponse", responseString);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -72,8 +74,9 @@ public class LogInRequest extends Request {
                     }
                 }
 
+
                 for (ClientHandler clientHandler : Server.getClients().values()) {
-                    if (clientHandler.getPlayer().getUserName() != null) {
+                    if (clientHandler.getPlayer().getUserName() != null && player != null) {
                         if (clientHandler.getPlayer().equals(player)) {
                             clientHandler.setLoggedIn(true);
                         }

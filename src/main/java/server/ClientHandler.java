@@ -56,6 +56,7 @@ public class ClientHandler extends Thread {
             String requestName = "";
             String message = "";
             while (true) {
+//                System.out.println(Server.getPlayQueue());
                 while (scanner.hasNextLine()) {
                     String text = scanner.nextLine();
                     switch (counter % 3) {
@@ -116,23 +117,21 @@ public class ClientHandler extends Thread {
     }
 
 
-
-    public void playPiece(int targetTileId){
-
+    public void playPiece(int targetTileId) {
+        if (!game.isFinished()) {
             if (!game.getBoard().getBoard().get(targetTileId).equals(TileStatus.O) &&
-                    !game.getBoard().getBoard().get(targetTileId).equals(TileStatus.X)){
-                if (game.getCurrentAlliance().equals(Alliance.O)){
-                    game.getBoard().getBoard().add(targetTileId,TileStatus.O);
-                    game.getBoard().getBoard().remove(targetTileId+1);
-                }else {
-                    game.getBoard().getBoard().add(targetTileId,TileStatus.X);
-                    game.getBoard().getBoard().remove(targetTileId+1);
+                    !game.getBoard().getBoard().get(targetTileId).equals(TileStatus.X)) {
+                if (game.getCurrentAlliance().equals(Alliance.O)) {
+                    game.getBoard().getBoard().add(targetTileId, TileStatus.O);
+                    game.getBoard().getBoard().remove(targetTileId + 1);
+                } else {
+                    game.getBoard().getBoard().add(targetTileId, TileStatus.X);
+                    game.getBoard().getBoard().remove(targetTileId + 1);
                 }
-
             }
             game.changeTurn();
         }
-
+    }
 
 
     //getter and setters

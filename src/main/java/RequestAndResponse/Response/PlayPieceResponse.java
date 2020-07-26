@@ -2,6 +2,8 @@ package RequestAndResponse.Response;
 
 import Model.Board.Board;
 
+import java.util.ArrayList;
+
 public class PlayPieceResponse extends Response {
 
 
@@ -12,13 +14,13 @@ public class PlayPieceResponse extends Response {
     private String friendlyIcon;
     private String enemyName;
     private String enemyIcon;
-    private boolean finished;
+    private String resultList;
 
 
 
-    public PlayPieceResponse(Board board,String friendlyName,
-                             String friendlyIcon,String enemyName,String enemyIcon,
-                             String turn,boolean finished) {
+    public PlayPieceResponse(Board board, String friendlyName,
+                             String friendlyIcon, String enemyName, String enemyIcon,
+                             String turn, String resultList) {
 
 
 
@@ -28,7 +30,7 @@ public class PlayPieceResponse extends Response {
         this.enemyName=enemyName;
         this.enemyIcon=enemyIcon;
         this.turn=turn;
-        this.finished=finished;
+        this.resultList = resultList;
 
     }
 
@@ -93,12 +95,12 @@ public class PlayPieceResponse extends Response {
         this.enemyIcon = enemyIcon;
     }
 
-    public boolean isFinished() {
-        return finished;
+    public String ResultList() {
+        return resultList;
     }
 
-    public void setFinished(boolean finished) {
-        this.finished = finished;
+    public void setResultList(String resultList) {
+        this.resultList = resultList;
     }
 
 }

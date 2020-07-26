@@ -2,7 +2,10 @@ package server;
 
 
 import Logic.Game;
+import Logic.TileStatus;
+import Model.Board.Board;
 import Model.Player.Player;
+import Util.Config.ConfigLoader;
 import Util.Json.ParsePlayerObjectIntoJson;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -15,10 +18,24 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 public class Server extends Thread {
 
-    private static final int serverPort = 1011;
+    Properties properties;
+
+    {
+        try {
+            properties = ConfigLoader.getInstance().
+                    readProperties("src/main/resources/ConfigFiles/PortConfig/PortConfig.properties");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    String configServerPort = (properties.getProperty("serverPort"));
+    private static int serverPort;
+
     ServerSocket serverSocket;
 
     private volatile boolean running;
@@ -30,13 +47,172 @@ public class Server extends Thread {
 
     public Server() {
         try {
+            if (configServerPort == null) {
+                serverPort = 8000;
+            } else {
+                serverPort = Integer.parseInt(configServerPort);
+            }
+            System.out.println(serverPort);
             serverSocket = new ServerSocket(serverPort);
             clients = new HashMap<>();
-            playQueue=new ArrayList<>();
-            runningGames=new ArrayList<>();
+            playQueue = new ArrayList<>();
+            runningGames = new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static String checkWins(Board board, int targetTileId) {
+        String winner = null;
+        TileStatus tileStatus = board.getBoard().get(targetTileId);
+        int counter = 0;
+        int mode = targetTileId % 7;
+        for (int i = 1; i <= mode; i++) {
+            if (board.getBoard().get(targetTileId - i).equals(tileStatus)) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 1; i <= 6 - mode; i++) {
+            if (board.getBoard().get(targetTileId + i).equals(tileStatus)) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+        if (counter >= 3) {
+            if (tileStatus.equals(TileStatus.X)) {
+                return winner = "X";
+            } else {
+                return winner = "O";
+            }
+        }
+
+        counter = 0;
+
+        int subMultiple = targetTileId / 7;
+        for (int i = 1; i <= subMultiple; i++) {
+            if (board.getBoard().get(targetTileId - 7 * i).equals(tileStatus)) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 1; i <= 6 - subMultiple; i++) {
+            if (board.getBoard().get(targetTileId + 7 * i).equals(tileStatus)) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+
+        if (counter >= 3) {
+            if (tileStatus.equals(TileStatus.X)) {
+                return winner = "X";
+            } else {
+                return winner = "O";
+            }
+        }
+
+
+        counter = 0;
+
+
+        subMultiple = targetTileId / 7;
+        mode = targetTileId % 7;
+        int plusNum = Math.min((6 - mode), (6 - subMultiple));
+        int minusNum = Math.min(mode, subMultiple);
+
+
+        for (int i = 1; i <= plusNum; i++) {
+            if (board.getBoard().get(targetTileId + 8 * i).equals(tileStatus)) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+
+
+        for (int i = 1; i <= minusNum; i++) {
+            if (board.getBoard().get(targetTileId - 8 * i).equals(tileStatus)) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+
+
+        if (counter >= 3) {
+            if (tileStatus.equals(TileStatus.X)) {
+                return winner = "X";
+            } else {
+                return winner = "O";
+            }
+        }
+
+
+        counter = 0;
+        subMultiple = targetTileId / 7;
+        mode = targetTileId % 7;
+        plusNum = Math.min((6 - subMultiple), (mode));
+        minusNum = Math.min(subMultiple, (6 - mode));
+
+
+        for (int i = 1; i <= plusNum; i++) {
+            if (board.getBoard().get(targetTileId + 6 * i).equals(tileStatus)) {
+//                System.out.println(targetTileId + 6 * i);
+                counter++;
+            } else {
+                break;
+            }
+        }
+
+
+        for (int i = 1; i <= minusNum; i++) {
+            if (board.getBoard().get(targetTileId - 6 * i).equals(tileStatus)) {
+//                System.out.println(targetTileId - 6 * i);
+                counter++;
+            } else {
+                break;
+            }
+        }
+
+        if (counter >= 3) {
+            if (tileStatus.equals(TileStatus.X)) {
+//                System.out.println(tileStatus.toString());
+//                System.out.println(targetTileId);
+//                System.out.println("hereeeeeeeeeeeeeeeeeeeeee");
+                return winner = "X";
+            } else {
+//                System.out.println(tileStatus);
+//                System.out.println(targetTileId);
+//                System.out.println("hereeeeeeeeeeeeeeeee");
+                return winner = "O";
+            }
+        }
+
+        boolean isDraw = true;
+
+        for (int i = 0; i < board.getBoard().size(); i++) {
+            if (!(board.getBoard().get(i).equals(TileStatus.X) ||
+                    board.getBoard().get(i).equals(TileStatus.O))) {
+
+                isDraw = false;
+                break;
+            }
+        }
+
+        if (isDraw) {
+            return "Draw";
+        } else {
+            return "null";
+        }
+
+
     }
 
 
