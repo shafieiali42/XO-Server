@@ -25,6 +25,7 @@ public class ClientHandler extends Thread {
     private String authtoken;
     private boolean loggedIn;
     private Game game;
+    private Game lastGame;
 
     public ClientHandler(Server server, Socket socket) {
         this.server = server;
@@ -116,11 +117,14 @@ public class ClientHandler extends Thread {
         printer.flush();
     }
 
+    static int counter = 0;
 
     public void playPiece(int targetTileId) {
         if (!game.isFinished()) {
+
             if (!game.getBoard().getBoard().get(targetTileId).equals(TileStatus.O) &&
                     !game.getBoard().getBoard().get(targetTileId).equals(TileStatus.X)) {
+
                 if (game.getCurrentAlliance().equals(Alliance.O)) {
                     game.getBoard().getBoard().add(targetTileId, TileStatus.O);
                     game.getBoard().getBoard().remove(targetTileId + 1);
@@ -130,7 +134,11 @@ public class ClientHandler extends Thread {
                 }
             }
             game.changeTurn();
+            game.getBoards().add(game.getBoard().copy());
+
+
         }
+
     }
 
 
@@ -175,6 +183,14 @@ public class ClientHandler extends Thread {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Game getLastGame() {
+        return lastGame;
+    }
+
+    public void setLastGame(Game lastGame) {
+        this.lastGame = lastGame;
     }
 
 }

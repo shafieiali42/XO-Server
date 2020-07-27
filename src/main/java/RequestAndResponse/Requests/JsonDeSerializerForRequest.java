@@ -18,6 +18,7 @@ public class JsonDeSerializerForRequest {
         map.put("PlayPieceRequest",PlayPieceRequest.class);
         map.put("EndGameRequest",EndGameRequest.class);
         map.put("StatusRequest",StatusRequest.class);
+        map.put("ScreenRecorderRequest",ScreenRecorderRequest.class);
     }
 
 

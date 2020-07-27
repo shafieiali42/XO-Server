@@ -81,11 +81,12 @@ public class EndGameRequest extends Request {
 
                     for (ClientHandler clientHandler : Server.getClients().values()) {
                         if (clientHandler.getPlayer().getUserName().equalsIgnoreCase(opponent)) {
+                            clientHandler.setLastGame(clientHandler.getGame());
                             clientHandler.setGame(null);
                         }
                     }
 
-
+                    Server.getClients().get(clientHandlerName).setLastGame(Server.getClients().get(clientHandlerName).getGame());
                     Server.getClients().get(clientHandlerName).setGame(null);
                 }
 

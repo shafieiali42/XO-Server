@@ -88,6 +88,8 @@ public class PlayPieceRequest extends Request {
                         game.getOPlayer().setScore();
                         game.setFinished(true);
                         Server.getRunningGames().remove(game);
+                        clientHandler1.setLastGame(clientHandler1.getGame());
+                        clientHandler2.setLastGame(clientHandler2.getGame());
                         clientHandler1.setGame(null);
                         clientHandler2.setGame(null);
                         try {
@@ -103,6 +105,8 @@ public class PlayPieceRequest extends Request {
                         game.getOPlayer().setScore();
                         game.setFinished(true);
                         Server.getRunningGames().remove(game);
+                        clientHandler1.setLastGame(clientHandler1.getGame());
+                        clientHandler2.setLastGame(clientHandler2.getGame());
                         clientHandler1.setGame(null);
                         clientHandler2.setGame(null);
                         try {
@@ -116,6 +120,8 @@ public class PlayPieceRequest extends Request {
                         game.getOPlayer().setScore();
                         game.setFinished(true);
                         Server.getRunningGames().remove(game);
+                        clientHandler1.setLastGame(clientHandler1.getGame());
+                        clientHandler2.setLastGame(clientHandler2.getGame());
                         clientHandler1.setGame(null);
                         clientHandler2.setGame(null);
 

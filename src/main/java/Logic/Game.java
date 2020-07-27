@@ -16,6 +16,7 @@ public class Game {
     private Alliance formerAlliance;
     private Board board;
     private boolean finished;
+    private ArrayList<Board> boards;
 
 
     public Game(Player XPlayer, Player OPlayer) {
@@ -29,7 +30,8 @@ public class Game {
         formerAlliance = Alliance.O;
         currentPlayer = XPlayer;
         formerPlayer = OPlayer;
-
+        boards=new ArrayList<>();
+        boards.add(new Board());
 //        defineStarter();
     }
 
@@ -134,6 +136,14 @@ public class Game {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public ArrayList<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(ArrayList<Board> boards) {
+        this.boards = boards;
     }
 
 }

@@ -19,6 +19,18 @@ public class Board {
     }
 
 
+
+    public Board copy(){
+        Board board =new Board();
+        board.getBoard().clear();
+        for (int i = 0; i < 49; i++) {
+            board.getBoard().add(this.board.get(i));
+        }
+        return board;
+    }
+
+
+
     //getter and setters
     //********************
 
