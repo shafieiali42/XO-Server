@@ -11,12 +11,11 @@ import javax.swing.*;
 public class LogInResponse extends Response {
 
     private Player player;
-    private boolean logInBefore;
 
 
-    public LogInResponse(Player player,boolean logInBefore) {
+    public LogInResponse(Player player) {
         this.player = player;
-        this.logInBefore=logInBefore;
+
     }
 
 
@@ -40,14 +39,7 @@ public class LogInResponse extends Response {
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
 
-    public boolean isLogInBefore() {
-        return logInBefore;
-    }
-
-    public void setLogInBefore(boolean logInBefore) {
-        this.logInBefore = logInBefore;
     }
 
 }

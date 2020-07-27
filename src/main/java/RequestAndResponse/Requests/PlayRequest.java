@@ -21,7 +21,6 @@ public class PlayRequest extends Request {
 
     @Override
     public void execute() {
-//        System.out.println("execute playRequest");
         for (String clientHandlerName : Server.getClients().keySet()) {
             if (clientHandlerName.equals(this.getApplicator())) {
                 Server.getPlayQueue().add(Server.getClients().get(clientHandlerName));
@@ -48,8 +47,6 @@ public class PlayRequest extends Request {
                     Server.getPlayQueue().remove(clientHandler2);
                     System.out.println(Server.getPlayQueue());
                     Game game = new Game(clientHandler1.getPlayer(), clientHandler2.getPlayer());
-//                    System.out.println("ClientHandler PLAYER1:" + clientHandler1.getPlayer());
-//                    System.out.println("ClientHandler PLAYER2:" + clientHandler2.getPlayer());
                     clientHandler1.setGame(game);
                     clientHandler2.setGame(game);
                     Server.getRunningGames().add(game);

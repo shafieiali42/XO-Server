@@ -26,7 +26,6 @@ public class JsonDeSerializerForRequest {
         setMap();
         Gson gson = new Gson();
         Class classOfCard = map.get(requestName);
-//            System.out.println(minionNames.name());
         Request request = (Request) gson.fromJson(requestString, classOfCard);
         request.setApplicator(applicator);
         return request;

@@ -90,8 +90,8 @@ public class EndGameRequest extends Request {
                     Response response = new EndGameResponse();
                     String responseString = new Gson().toJson(response);
                     Server.sendResponseToClient(opponentHandler, "EndGameResponse", responseString);
-                    Server.getClients().get(clientHandlerName).setGame(null);
-                    Server.getClients().get(opponentHandler).setGame(null);
+//                    Server.getClients().get(clientHandlerName).setGame(null);
+//                    Server.getClients().get(opponentHandler).setGame(null);
                 }
 
 
