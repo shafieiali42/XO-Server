@@ -164,7 +164,6 @@ public class Server extends Thread {
 
         for (int i = 1; i <= plusNum; i++) {
             if (board.getBoard().get(targetTileId + 6 * i).equals(tileStatus)) {
-//                System.out.println(targetTileId + 6 * i);
                 counter++;
             } else {
                 break;
@@ -174,7 +173,6 @@ public class Server extends Thread {
 
         for (int i = 1; i <= minusNum; i++) {
             if (board.getBoard().get(targetTileId - 6 * i).equals(tileStatus)) {
-//                System.out.println(targetTileId - 6 * i);
                 counter++;
             } else {
                 break;
@@ -183,14 +181,10 @@ public class Server extends Thread {
 
         if (counter >= 3) {
             if (tileStatus.equals(TileStatus.X)) {
-//                System.out.println(tileStatus.toString());
-//                System.out.println(targetTileId);
-//                System.out.println("hereeeeeeeeeeeeeeeeeeeeee");
+
                 return winner = "X";
             } else {
-//                System.out.println(tileStatus);
-//                System.out.println(targetTileId);
-//                System.out.println("hereeeeeeeeeeeeeeeee");
+
                 return winner = "O";
             }
         }
@@ -230,7 +224,6 @@ public class Server extends Thread {
         running = true;
         while (running) {
             Socket socket = null;
-//            System.out.println(clients);
             try {
                 socket = serverSocket.accept();
                 ClientHandler clientHandler = new ClientHandler(this, socket);

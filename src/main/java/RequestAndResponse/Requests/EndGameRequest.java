@@ -1,7 +1,11 @@
 package RequestAndResponse.Requests;
 
 import Logic.Game;
+import Model.Player.Player;
+import RequestAndResponse.Response.EndGameResponse;
+import RequestAndResponse.Response.Response;
 import Util.Json.ParsePlayerObjectIntoJson;
+import com.google.gson.Gson;
 import server.ClientHandler;
 import server.Server;
 
@@ -19,14 +23,12 @@ public class EndGameRequest extends Request {
     @Override
     public void execute() {
         String opponent = null;
+
         for (String clientHandlerName : Server.getClients().keySet()) {
             if (clientHandlerName.equalsIgnoreCase(this.getApplicator())) {
-                Server.getClients().get(clientHandlerName).getPlayer().
-                        setLoose(Server.getClients().get(clientHandlerName).
-                                getPlayer().getLoose() + 1);
 
 
-                Server.getClients().get(clientHandlerName).getPlayer().setScore();
+
 
                 try {
                     ParsePlayerObjectIntoJson.serializePlayer(Server.getClients().get(clientHandlerName).getPlayer());
@@ -38,13 +40,7 @@ public class EndGameRequest extends Request {
                     if (Server.getClients().get(clientHandlerName).getGame().getXPlayer().
                             getUserName().equalsIgnoreCase(Server.getClients().
                             get(clientHandlerName).getPlayer().getUserName())) {
-                        Server.getClients().get(clientHandlerName).getGame().getXPlayer().
-                                setWins(Server.getClients().get(clientHandlerName).
-                                        getGame().getXPlayer().getWins() + 1);
 
-                        System.out.println(Server.getClients().get(clientHandlerName).getGame().getXPlayer());
-                        Server.getClients().get(clientHandlerName).getGame().getXPlayer().
-                                setScore();
 
                         try {
                             ParsePlayerObjectIntoJson.serializePlayer(Server.getClients().get(clientHandlerName).getGame().getXPlayer());
@@ -53,41 +49,49 @@ public class EndGameRequest extends Request {
                         }
 
 
-                        opponent = Server.getClients().get(clientHandlerName).getGame().getXPlayer().getUserName();
+                        opponent = Server.getClients().get(clientHandlerName).getGame().getOPlayer().getUserName();
 
                     } else if (Server.getClients().get(clientHandlerName).getGame().getOPlayer().
                             getUserName().equalsIgnoreCase(Server.getClients().
                             get(clientHandlerName).getPlayer().getUserName())) {
-                        Server.getClients().get(clientHandlerName).getGame().getOPlayer().
-                                setWins(Server.getClients().get(clientHandlerName).
-                                        getGame().getOPlayer().getWins() + 1);
-                        Server.getClients().get(clientHandlerName).getGame().getOPlayer().
-                                setScore();
 
 
                         try {
-                            ParsePlayerObjectIntoJson.serializePlayer( Server.getClients().get(clientHandlerName).getGame().getOPlayer());
+                            ParsePlayerObjectIntoJson.serializePlayer(Server.getClients().get(clientHandlerName).getGame().getOPlayer());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-                        opponent = Server.getClients().get(clientHandlerName).getGame().getOPlayer().getUserName();
+                        opponent = Server.getClients().get(clientHandlerName).getGame().getXPlayer().getUserName();
 
 
                     }
                     Server.getClients().get(clientHandlerName).getGame().setFinished(true);
                     Server.getRunningGames().remove(Server.getClients().
                             get(clientHandlerName).getGame());
+//
 
-                    for (ClientHandler clientHandler : Server.getClients().values()) {
-                        if (clientHandler.getPlayer().getUserName().equalsIgnoreCase(opponent)) {
-                            clientHandler.setLastGame(clientHandler.getGame());
-                            clientHandler.setGame(null);
+                    String opponentHandler=null;
+                    for (String name:Server.getClients().keySet()){
+                        if (Server.getClients().get(name).getPlayer().getUserName().equals(opponent)){
+                            opponentHandler=name;
                         }
                     }
+//                    for (ClientHandler clientHandler : Server.getClients().values()) {
+//                        if (clientHandler.getPlayer().getUserName().equalsIgnoreCase(opponent)) {
+//                            clientHandler.setLastGame(clientHandler.getGame());
+//                            clientHandler.setGame(null);
+//                        }
+//                    }
+
+
 
                     Server.getClients().get(clientHandlerName).setLastGame(Server.getClients().get(clientHandlerName).getGame());
+                    Response response = new EndGameResponse();
+                    String responseString = new Gson().toJson(response);
+                    Server.sendResponseToClient(opponentHandler, "EndGameResponse", responseString);
                     Server.getClients().get(clientHandlerName).setGame(null);
+                    Server.getClients().get(opponentHandler).setGame(null);
                 }
 
 

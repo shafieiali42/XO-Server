@@ -13,7 +13,6 @@ public class ScreenRecorderResponse extends Response {
 
 
     public ScreenRecorderResponse(ArrayList<Board> boards) {
-        System.out.println("Size :   "+boards.size());
         this.boards=boards;
     }
 

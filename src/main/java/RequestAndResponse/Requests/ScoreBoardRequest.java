@@ -79,7 +79,6 @@ public class ScoreBoardRequest extends Request {
 
         for (Player player:playerList){
             player.setScore();
-//            System.out.println("Player: "+player.getUserName()+" Score: "+player.getScore());
         }
 
 

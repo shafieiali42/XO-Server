@@ -57,7 +57,6 @@ public class ClientHandler extends Thread {
             String requestName = "";
             String message = "";
             while (true) {
-//                System.out.println(Server.getPlayQueue());
                 while (scanner.hasNextLine()) {
                     String text = scanner.nextLine();
                     switch (counter % 3) {
@@ -81,7 +80,6 @@ public class ClientHandler extends Thread {
                                             request.setApplicator(authtoken);
                                             this.authtoken = authtoken;
                                             Server.getClients().put(authtoken, this);
-//                                            System.out.println(Server.getClients());
                                             break;
                                         }
 //                                        }
